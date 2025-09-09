@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Recommendations</title>
+</head>
+<body>
+  <h1>Top Recommendations for {{ name }}</h1>
+  <ul>
+    {% for job in results %}
+      <li>
+        <b>{{ job["Job Title"] }}</b> at {{ job["Company Name"] }}  
+        ({{ job["Location"] }}) – Score: {{ job["Match Score"] }}
+      </li>
+    {% endfor %}
+  </ul>
+  <a href="/">Back</a>
+</body>
+</html>
