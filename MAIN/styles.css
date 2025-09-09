@@ -1,0 +1,230 @@
+/* =========================
+   INTERNSHIP PORTAL STYLES
+   Save as styles.css
+   ========================= */
+
+/* Root colors and typography */
+:root{
+  --sidebar-bg: #2563eb; /* blue */
+  --sidebar-accent: #1e40af;
+  --accent: #06b6d4;     /* teal/blue for buttons */
+  --bg: #f3f6fb;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --radius: 12px;
+  --maxwidth: 1200px;
+}
+
+/* #Base layout */
+* { box-sizing: border-box; }
+html,body { height:100%; margin:0; font-family: 'Roboto', system-ui, -apple-system, 'Segoe UI', 'Helvetica', 'Arial', sans-serif; background:var(--bg); color:#111827; }
+.muted { color: var(--muted); font-size:0.95rem; }
+
+/* #Reusable buttons */
+.btn {
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight:600;
+  background: transparent;
+}
+.btn.primary { background: var(--accent); color:white; box-shadow: 0 6px 18px rgba(6,182,212,0.12); }
+.btn.outline { border:1px solid rgba(0,0,0,0.08); background:white; }
+.btn.google { display:flex; align-items:center; gap:8px; justify-content:center; }
+
+/* #Login screen */
+.page-center{ display:flex; justify-content:center; align-items:center; min-height:100vh; padding:30px;}
+.login-card{ display:flex; width:100%; max-width:1100px; border-radius:var(--radius); overflow:hidden; box-shadow:0 12px 40px rgba(2,6,23,0.08); background:white; }
+.login-left{ flex:1; background:linear-gradient(180deg,#dbeafe,#cffafe); padding:32px; display:flex; flex-direction:column; gap:12px; justify-content:center; }
+.login-right{ flex:1; padding:32px; display:flex; flex-direction:column; gap:12px; justify-content:center; }
+.login-left h2{ font-family:'Montserrat'; color:#0f172a; font-size:1.6rem; }
+.login-left p{ color:var(--muted); }
+.hero-img{ width:100%; border-radius:8px; margin-top:12px; object-fit:cover; }
+
+/* login form inputs */
+.login-form label{ font-size:0.9rem; margin-top:8px; color:var(--muted); }
+.login-form input[type="text"], .login-form input[type="password"], .login-form input[type="email"]{
+  padding:10px 12px; border:1px solid rgba(2,6,23,0.06); border-radius:8px; font-size:1rem; width:100%;
+}
+
+/* small divider */
+.divider{ text-align:center; margin:10px 0; position:relative; }
+.divider span{ background:white; padding:0 10px; color:var(--muted); position:relative; z-index:1; }
+
+/* =========================
+   DASHBOARD LAYOUT
+   ========================= */
+
+/* Sidebar (fixed) #Sidebar styles */
+.sidebar{
+  position:fixed; left:0; top:0; bottom:0; width:240px; background:var(--sidebar-bg); color:white; padding:28px 18px; box-shadow:2px 0 14px rgba(16,24,40,0.06);
+  display:flex; flex-direction:column; justify-content:space-between; gap:10px;
+}
+.sidebar .logo{ font-weight:700; font-size:1.1rem; margin-bottom:8px; }
+.menu{ list-style:none; padding:0; margin:6px 0; }
+.menu-item{ display:flex; gap:12px; align-items:center; padding:10px 12px; border-radius:10px; cursor:pointer; font-weight:500; transition:all .18s; color: #f8fafc; }
+.menu-item i{ width:20px; text-align:center; }
+.menu-item:hover{ background:var(--sidebar-accent); transform: translateX(4px); }
+.menu-item.active{ background:linear-gradient(90deg,var(--sidebar-accent), #153eab); box-shadow: inset 3px 0 0 rgba(255,255,255,0.06); }
+
+.sidebar-bottom{ font-size:0.9rem; color:rgba(255,255,255,0.9); }
+
+/* Main content area (to the right of sidebar) */
+#dashboard{ display:flex; min-height:100vh; }
+.main-content{ margin-left:240px; padding:28px; width:100%; max-width:calc(100% - 240px); }
+
+/* Top bar */
+.topbar{ display:flex; justify-content:space-between; align-items:center; gap:20px; margin-bottom:18px; }
+.topbar .welcome h2{ margin:0; font-family:'Montserrat'; font-size:1.25rem; }
+.topbar .top-actions{ display:flex; gap:10px; align-items:center; }
+.top-actions input[type="search"]{ padding:10px 12px; border-radius:10px; border:1px solid rgba(2,6,23,0.06); width:360px; }
+.top-actions .btn{ padding:10px 14px; }
+
+/* Content sections */
+.content-section{ display:none; }
+.content-section.active{ display:block; }
+
+/* small cards row */
+.section-row{ display:flex; gap:16px; margin-bottom:18px; }
+.card.small{ background:var(--card); padding:16px; border-radius:10px; box-shadow:0 8px 24px rgba(2,6,23,0.04); flex:1; }
+.card.small h4{ margin:0; font-size:0.95rem; }
+.card.small .stat{ font-size:1.8rem; margin-top:6px; font-weight:700; color:var(--accent); }
+
+/* grid of internship cards */
+.cards-grid{ display:grid; grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap:18px; margin-top:8px; }
+.intern-card{ display:flex; gap:14px; background:var(--card); padding:16px; border-radius:12px; align-items:flex-start; box-shadow:0 10px 28px rgba(2,6,23,0.06); }
+.intern-card img{ width:80px; height:80px; object-fit:cover; border-radius:10px; }
+
+/* intern card details */
+.intern-card .info h4{ margin:0 0 6px 0; font-family:'Montserrat'; color:#0f172a; }
+.intern-card .info p{ margin:4px 0; color:var(--muted); font-size:0.95rem; }
+.intern-card .actions{ margin-top:8px; display:flex; gap:8px; }
+
+/* profile layout */
+.profile-grid{ display:grid; grid-template-columns: 220px 1fr; gap:20px; align-items:start; }
+.profile-card{ padding:16px; background:var(--card); border-radius:12px; box-shadow:0 8px 20px rgba(2,6,23,0.04); display:flex; flex-direction:column; align-items:center; gap:8px; }
+.profile-pic{ width:140px; height:140px; object-fit:cover; border-radius:12px; }
+.profile-form{ display:flex; flex-direction:column; gap:10px; }
+.profile-form input[type="text"], .profile-form input[type="email"]{ padding:10px 12px; border-radius:8px; border:1px solid rgba(2,6,23,0.06); }
+
+/* test box */
+.test-box{ background:var(--card); padding:16px; border-radius:12px; box-shadow:0 8px 20px rgba(2,6,23,0.04); margin-top:12px; }
+.test-list li{ margin:12px 0; }
+
+/* Application table */
+.app-table{ width:100%; border-collapse:collapse; margin-top:12px; background:transparent; }
+.app-table th, .app-table td{ padding:12px 10px; text-align:left; border-bottom:1px solid rgba(2,6,23,0.04); }
+.app-table tbody tr:hover{ background:rgba(2,6,23,0.02); }
+
+/* modal */
+.modal{ position:fixed; inset:0; background:rgba(2,6,23,0.45); display:flex; justify-content:center; align-items:center; z-index:1000; }
+.modal-inner{ width:90%; max-width:720px; background:white; border-radius:12px; padding:20px; position:relative; }
+.modal-close{ position:absolute; right:12px; top:12px; background:transparent; border:none; font-size:1.05rem; cursor:pointer; }
+
+/* helpers */
+.hidden{ display:none !important; }
+.section-title{ margin-top:8px; margin-bottom:8px; font-family:'Montserrat'; }
+
+/* responsiveness */
+@media (max-width: 900px){
+  .sidebar{ width:64px; padding:18px; }
+  .menu-item span{ display:none; }
+  .main-content{ margin-left:64px; }
+  .top-actions input[type="search"]{ width:160px; }
+  .profile-grid{ grid-template-columns: 1fr; }
+  .cards-grid{ grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); }
+}
+/* PROFILE LAYOUT */
+.profile-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+}
+
+.profile-sidebar {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+}
+
+.profile-avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+}
+
+.profile-sidebar h2 {
+  margin: 8px 0 4px 0;
+  font-family: 'Montserrat';
+}
+
+.profile-sidebar .role {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+.profile-details {
+  text-align: left;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+.profile-main .card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+}
+
+.skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skills-tags .tag {
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 20px;
+}
+
+.portfolio-group h4 {
+  margin-bottom: 8px;
+}
+
+.portfolio-group .thumbs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.portfolio-group .thumbs img {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.portfolio-group a {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: var(--accent);
+  text-decoration: none;
+}
