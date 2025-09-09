@@ -1,5 +1,5 @@
 /* =========================
-   script.js
+   script.js (cleaned)
    Handles:
    - login / logout
    - sidebar navigation
@@ -113,6 +113,17 @@ const pfSkills = document.getElementById("pfSkills");
 const profilePic = document.getElementById("profilePic");
 const resumeInput = document.getElementById("resumeInput");
 
+const countrySelect = document.getElementById("countrySelect");
+const citySelect = document.getElementById("citySelect");
+
+const countryCodeSelect = document.getElementById("countryCode");
+const phoneInput = document.getElementById("inputPhone");
+
+const sidebarEmail = document.getElementById("sidebarEmail");
+const sidebarPhone = document.getElementById("sidebarPhone");
+const sidebarLocation = document.getElementById("sidebarLocation");
+const sidebarUniversity = document.getElementById("sidebarUniversity");
+
 /* ---------- Helpers ---------- */
 function saveApplied(){
   localStorage.setItem("appliedInternships", JSON.stringify(applied));
@@ -171,16 +182,11 @@ if(logged){
 /* ---------- Sidebar navigation ---------- */
 menuItems.forEach(item=>{
   item.addEventListener("click", ()=> {
-    // logout item has id logoutBtn and is handled separately
-    if(item.id === "logoutBtn"){
-      return;
-    }
+    if(item.id === "logoutBtn"){ return; }
 
-    // set active menu
     menuItems.forEach(m => m.classList.remove("active"));
     item.classList.add("active");
 
-    // show section mapped by data-section
     contentSections.forEach(s => s.classList.remove("active"));
     const sectionId = item.dataset.section;
     const section = document.getElementById(sectionId);
@@ -218,25 +224,15 @@ function renderList(container, list){
     return;
   }
   list.forEach(i => container.appendChild(createInternCard(i)));
-  // attach listeners via delegation
 }
 
 function renderAll(){
-  // Dashboard: top picks (all private + govt combined)
   renderList(internshipCards, internships);
-
-  // private / govt lists
   renderList(privateCards, internships.filter(i=>i.type==="private"));
   renderList(govCards, internships.filter(i=>i.type==="government"));
-
-  // applications
   renderApplications();
-
-  // profile load
   loadProfile();
   renderProfile();
-
-  // counts
   appliedCount.textContent = applied.length;
 }
 
@@ -258,14 +254,13 @@ function renderApplications(){
       <td>${app.status}</td>
       <td>
         <button class="btn outline view-app" data-id="${app.id}">View</button>
-        <button class="btn" style="background:#ff7675;color:white" data-id="${app.id}" class="withdraw">Withdraw</button>
+        <button class="btn" style="background:#ff7675;color:white" data-id="${app.id}">Withdraw</button>
       </td>
     `;
     applicationsList.appendChild(tr);
   });
 }
 
-/* Apply / withdraw functions */
 function applyToInternship(id){
   if(applied.some(a=>a.id===id)) {
     alert("You already applied to this internship.");
@@ -297,31 +292,17 @@ function renderProfile(){
     document.getElementById("pfLangs").textContent = profile.languages || "English";
     document.getElementById("pfExp").textContent = profile.experience || "0";
     document.getElementById("pfSalary").textContent = profile.salary || "—";
-
-    // Skills as tags
-    const skills = (profile.skills || "").split(",").map(s=>s.trim()).filter(Boolean);
-    const tags = document.getElementById("pfSkillsTags");
-    tags.innerHTML = "";
-    skills.forEach(skill=>{
-      const span = document.createElement("span");
-      span.className = "tag";
-      span.textContent = skill;
-      tags.appendChild(span);
-    });
   }else {
-    // fallback values
     pfName.value = localStorage.getItem(usernameKey) || "";
   }
 }
 
-/* event: profile save */
 profileForm && profileForm.addEventListener("submit", (e)=>{
   e.preventDefault();
   saveProfile();
   alert("Profile saved.");
 });
 
-/* reset profile button */
 document.getElementById("profileReset")?.addEventListener("click", ()=>{
   pfName.value = "";
   pfEmail.value = "";
@@ -340,7 +321,6 @@ function searchAndRender(query){
     i.company.toLowerCase().includes(q) ||
     i.location.toLowerCase().includes(q)
   );
-  // show results in main cards (dashboard)
   renderList(internshipCards, filtered);
 }
 
@@ -348,7 +328,6 @@ globalSearchBtn.addEventListener("click", ()=>{
   searchAndRender(globalSearch.value);
 });
 
-/* also support pressing enter in search */
 globalSearch.addEventListener("keydown", (e)=>{
   if(e.key === "Enter"){ e.preventDefault(); searchAndRender(globalSearch.value); }
 });
@@ -357,13 +336,11 @@ globalSearch.addEventListener("keydown", (e)=>{
 document.addEventListener("click", (e)=>{
   const target = e.target;
 
-  // Apply Now from cards
   if(target.matches(".apply-btn")){
     const id = target.dataset.id;
     applyToInternship(id);
   }
 
-  // View details from cards
   if(target.matches(".view-btn")){
     const id = target.dataset.id;
     const intern = internships.find(x=>x.id===id);
@@ -382,13 +359,11 @@ document.addEventListener("click", (e)=>{
     }
   }
 
-  // modal close
   if(target.matches(".modal-close") || target.id === "modalCloseBtn"){
     detailModal.classList.add("hidden");
     modalContent.innerHTML = "";
   }
 
-  // withdraw from application table
   if(target.matches("button[data-id]") && target.textContent.includes("Withdraw")){
     const id = target.dataset.id;
     if(confirm("Withdraw application?")){
@@ -396,7 +371,6 @@ document.addEventListener("click", (e)=>{
     }
   }
 
-  // view application details
   if(target.matches(".view-app")){
     const id = target.dataset.id;
     const intern = internships.find(x=>x.id===id);
@@ -413,14 +387,12 @@ document.addEventListener("click", (e)=>{
     }
   }
 
-  // close modal button created from dynamic content
   if(target.id === "modalCloseBtn2"){
     detailModal.classList.add("hidden");
     modalContent.innerHTML = "";
   }
 });
 
-/* modal close helper */
 modalClose?.addEventListener("click", ()=> detailModal.classList.add("hidden"));
 detailModal.addEventListener("click", (e)=> {
   if(e.target === detailModal) detailModal.classList.add("hidden");
@@ -428,11 +400,8 @@ detailModal.addEventListener("click", (e)=> {
 
 /* ---------- Persist / load state ---------- */
 function init(){
-  // ensure applied is loaded
   applied = JSON.parse(localStorage.getItem("appliedInternships") || "[]");
-  // load profile
   loadProfile();
-  // render UI
   renderAll();
 }
 init();

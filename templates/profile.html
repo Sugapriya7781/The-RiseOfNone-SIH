@@ -1,139 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Internship Portal — Profile Input</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Internship Portal Profile</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
+
 <body>
-  <main class="main-content">
-    <header class="topbar">
-      <h2>Student Profile Input</h2>
-      <p class="muted">Fill in your details and select your skills</p>
-    </header>
+  <div class="container py-5">
+    <div class="row g-4">
+      <!-- Profile Sidebar -->
+      <!-- SIDEBAR -->
+      {% include 'sidebar.html' %}
+      <div class="col-lg-4">
+        <div class="profile-sidebar shadow-sm">
+          <img id="profileImg"
+            src="https://media.licdn.com/dms/image/v2/D5603AQHpg9VD502s9Q/profile-displayphoto-shrink_200_200/B56ZQsSqVQH0Ag-/0/1735909879504?e=1760572800&v=beta&t=9ounN2qAsaCPdvRImza3QnZUpRPinpJyEYgM9lIWxS8"
+            alt="Avatar" class="profile-pic mb-3" />
+          <label class="edit-link" for="photoUpload" role="button" tabindex="0">Change Photo</label>
+          <input type="file" id="photoUpload" accept="image/*" style="display:none;" />
+          <h4 class="mt-3 mb-2" id="profileName">Loga Dharinish V</h4>
+          <div class="info-section small mb-3">
+            <div class="mb-1"><i class="fa fa-envelope"></i> <span id="sidebarEmail">logadharinish@gmail.com</span>
+            </div>
+            <div class="mb-1"><i class="fa fa-phone"></i> <span id="sidebarPhone">+91 636*****34</span></div>
+            <div class="mb-1"><i class="fa fa-map-marker-alt"></i> <span id="sidebarLocation">Tamil Nadu, India</span>
+            </div>
+            <div class="mb-1"><i class="fa fa-university"></i> <span id="sidebarUniversity">SRIT</span></div>
+          </div>
+          <div>
+            <span class="profile-label">Specializations</span>
+            <div id="skillsList" class="d-flex flex-wrap gap-2"></div>
 
-    <section class="content-section active">
-      <form method="POST" action="{{ url_for('profile') }}" class="profile-form">
+            <!-- Suggested skill keywords -->
+            <div id="suggestedSkills" class="d-flex flex-wrap gap-2 mt-2"></div>
 
-        
-        <!-- Basic Details -->
-        <div class="form-group">
-          <label for="name">Full Name</label>
-          <input id="name" name="name" type="text" placeholder="Enter your name" required>
+            <div class="position-relative mt-2">
+              <input type="text" class="form-control" id="skillsInput" placeholder="Add a skill" autocomplete="off" />
+              <div id="suggestionBox" class="autocomplete-items"></div>
+            </div>
+            <button class="btn btn-primary btn-sm mt-2 w-100" onclick="addSkill()">Add Skill</button>
+          </div>
         </div>
+      </div>
 
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" placeholder="Enter your email" required>
+      <!-- Profile Details Form -->
+      <div class="col-lg-8">
+        <div class="card p-4 shadow-sm rounded-3">
+          <h5 class="mb-4 text-primary fw-semibold">Account Details</h5>
+          <form id="profileForm" onsubmit="event.preventDefault(); saveProfile();">
+            <div class="row g-3">
+
+              <div class="col-md-6">
+                <label for="inputUsername" class="profile-label">Username</label>
+                <input type="text" class="form-control" id="inputUsername" placeholder="Enter username" />
+              </div>
+
+              <div class="col-md-6">
+                <label for="inputEmail" class="profile-label">Email address <span class="text-danger">*</span></label>
+                <input type="email" class="form-control" id="inputEmail" placeholder="Enter your email" required />
+              </div>
+
+              <div class="col-md-6">
+                <label for="inputFirstName" class="profile-label">First name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="inputFirstName" placeholder="First name" required />
+              </div>
+
+              <div class="col-md-6">
+                <label for="inputLastName" class="profile-label">Last name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="inputLastName" placeholder="Last name" required />
+              </div>
+
+              <!-- Country and City dropdowns -->
+              <div class="col-md-6">
+                <label for="countrySelect" class="profile-label">Country <span class="text-danger">*</span></label>
+                <select id="countrySelect" class="form-select" required>
+                  <option value="" selected disabled>Select a country</option>
+                  <option value="India">India</option>
+                  <option value="USA">USA</option>
+                  <option value="UK">UK</option>
+                  <option value="Australia">Australia</option>
+                  <option value="Japan">Japan</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label for="citySelect" class="profile-label">City <span class="text-danger">*</span></label>
+                <select id="citySelect" class="form-select" disabled required>
+                  <option value="" selected disabled>Select a city</option>
+                </select>
+              </div>
+
+              <!-- Country code + phone number -->
+              <div class="col-md-4">
+                <label for="countryCode" class="profile-label">Country Code <span class="text-danger">*</span></label>
+                <select id="countryCode" class="form-select" required>
+                  <option value="+91" data-length="10" selected>India (+91)</option>
+                  <option value="+1" data-length="10">USA (+1)</option>
+                  <option value="+44" data-length="10">UK (+44)</option>
+                  <option value="+61" data-length="9">Australia (+61)</option>
+                  <option value="+81" data-length="10">Japan (+81)</option>
+                </select>
+              </div>
+
+              <div class="col-md-8">
+                <label for="inputPhone" class="profile-label">Phone Number <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="inputPhone" placeholder="Enter phone number" maxlength="10"
+                  required />
+              </div>
+
+              <!-- Other required fields -->
+              <div class="col-md-6">
+                <label for="inputUniversity" class="profile-label">University/College <span
+                    class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="inputUniversity" placeholder="University or College"
+                  required />
+              </div>
+
+              <div class="col-md-6">
+                <label for="inputDegree" class="profile-label">Degree <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="inputDegree" placeholder="Degree" required />
+              </div>
+
+              <div class="col-md-6">
+                <label for="inputFieldStudy" class="profile-label">Field of Study <span
+                    class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="inputFieldStudy" placeholder="Field of Study" required />
+              </div>
+
+              <div class="col-md-6">
+                <label for="inputGraduationYear" class="profile-label">Graduation Year <span
+                    class="text-danger">*</span></label>
+                <input type="number" class="form-control" id="inputGraduationYear" placeholder="Graduation Year"
+                  min="1900" max="2100" required />
+              </div>
+
+              <div class="col-md-6">
+                <label for="inputLinkedIn" class="profile-label">LinkedIn Profile URL</label>
+                <input type="url" class="form-control" id="inputLinkedIn"
+                  placeholder="https://linkedin.com/in/username" />
+              </div>
+
+              <div class="col-12">
+                <label for="inputPortfolio" class="profile-label">Portfolio/Website URL</label>
+                <input type="url" class="form-control" id="inputPortfolio" placeholder="https://yourportfolio.com" />
+              </div>
+
+              <div class="col-12">
+                <label for="inputBio" class="profile-label">Short Bio / About Me</label>
+                <textarea class="form-control" id="inputBio" rows="3"
+                  placeholder="Write something about yourself"></textarea>
+              </div>
+
+            </div>
+            <button class="btn btn-primary mt-4 w-100 py-2 fs-5" type="submit">Save changes</button>
+          </form>
         </div>
-
-        <div class="form-group">
-          <label for="experience">Experience (in years)</label>
-          <input id="experience" name="experience" type="number" min="0" max="40" value="0">
-        </div>
-
-        <!-- Role Selection -->
-        <div class="form-group">
-          <label for="role">Choose Role</label>
-          <select id="role" name="role" required>
-            <option value="">-- Select Role --</option>
-            <option value="business_analyst">Business Analyst</option>
-            <option value="data_analyst">Data Analyst</option>
-            <option value="data_engineer">Data Engineer</option>
-            <option value="data_scientist">Data Scientist</option>
-          </select>
-        </div>
-
-        <!-- Skills (Multi-choice) -->
-        <div class="form-group">
-          <label>Hard Skills</label>
-          <div id="hardSkills" class="checkbox-group"></div>
-        </div>
-
-        <div class="form-group">
-          <label>Domain Skills</label>
-          <div id="domainSkills" class="checkbox-group"></div>
-        </div>
-
-        <div class="form-group">
-          <label>Soft Skills</label>
-          <div id="softSkills" class="checkbox-group"></div>
-        </div>
-
-        <!-- Submit -->
-        <div class="form-actions">
-          <button type="submit" class="btn primary">Save Profile</button>
-        </div>
-      </form>
-    </section>
-  </main>
-
-  <script>
-    // ROLE_SKILLS dict (frontend version, same as Python)
-    const ROLE_SKILLS = {
-      "business_analyst": {
-        "hard": ["excel", "sql", "tableau", "power bi", "sas", "r",
-                 "statistics", "financial modeling", "data visualization", "reporting"],
-        "domain": ["finance", "banking", "insurance", "healthcare",
-                   "supply chain", "marketing", "operations"],
-        "soft": ["communication", "stakeholder management", "problem solving",
-                 "analytical thinking", "documentation"]
-      },
-      "data_analyst": {
-        "hard": ["sql", "python", "pandas", "numpy", "excel", "tableau", "power bi",
-                 "looker", "r", "statistics", "data cleaning", "etl"],
-        "domain": ["retail", "e-commerce", "marketing", "healthcare", "operations"],
-        "soft": ["attention to detail", "visualization storytelling",
-                 "collaboration", "critical thinking"]
-      },
-      "data_engineer": {
-        "hard": ["python", "sql", "java", "scala", "spark", "hadoop", "kafka",
-                 "airflow", "dbt", "snowflake", "redshift", "bigquery",
-                 "aws", "azure", "gcp", "docker", "kubernetes", "etl",
-                 "data warehouse", "pipelines"],
-        "domain": ["cloud", "streaming", "data pipelines", "big data",
-                   "healthcare", "finance"],
-        "soft": ["problem solving", "teamwork", "ownership", "documentation"]
-      },
-      "data_scientist": {
-        "hard": ["python", "r", "sql", "machine learning", "deep learning",
-                 "nlp", "tensorflow", "pytorch", "scikit-learn",
-                 "statistics", "probability", "optimization", "time series",
-                 "computer vision"],
-        "domain": ["ai", "healthcare", "finance", "retail",
-                   "predictive analytics", "genai"],
-        "soft": ["critical thinking", "research mindset",
-                 "communication", "problem solving"]
-      }
-    };
-
-    const roleSelect = document.getElementById("role");
-    const hardDiv = document.getElementById("hardSkills");
-    const domainDiv = document.getElementById("domainSkills");
-    const softDiv = document.getElementById("softSkills");
-
-    roleSelect.addEventListener("change", () => {
-      const role = roleSelect.value;
-      hardDiv.innerHTML = "";
-      domainDiv.innerHTML = "";
-      softDiv.innerHTML = "";
-
-      if (ROLE_SKILLS[role]) {
-        ROLE_SKILLS[role].hard.forEach(skill => {
-          hardDiv.innerHTML += `<label><input type="checkbox" name="hard_skills" value="${skill}"> ${skill}</label>`;
-        });
-        ROLE_SKILLS[role].domain.forEach(skill => {
-          domainDiv.innerHTML += `<label><input type="checkbox" name="domain_skills" value="${skill}"> ${skill}</label>`;
-        });
-        ROLE_SKILLS[role].soft.forEach(skill => {
-          softDiv.innerHTML += `<label><input type="checkbox" name="soft_skills" value="${skill}"> ${skill}</label>`;
-        });
-      }
-    });
-  </script>
+      </div>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <div id="toast" class="toast-notification"></div>
 </body>
+
 </html>

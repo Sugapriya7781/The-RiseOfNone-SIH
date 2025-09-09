@@ -3,11 +3,12 @@
 
 import pandas as pd
 import re
+import os
 
 # =====================
 # Load Dataset
 # =====================
-file_path = r"D:\Projects\Smart India Hackathon\static\merged_data.csv"
+file_path = os.path.join("data", "merged_data.csv")
 
 try:
     df = pd.read_csv(file_path)

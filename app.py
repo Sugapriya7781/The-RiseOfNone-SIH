@@ -1,5 +1,5 @@
+from flask import Flask, render_template, request, redirect, url_for, session
 
-from flask import Flask, render_template, request, redirect, url_for
 import pandas as pd
 from text_exact import recommend_jobs, extract_skills, ROLE_SKILLS
 
@@ -11,8 +11,8 @@ df["Extracted Skills"] = df.apply(
     lambda row: extract_skills(row["Job Description"], row["source"]), axis=1
 )
 
-
 app = Flask(__name__)
+app.secret_key = "supersecret"  # needed for session
 
 @app.route("/")
 def login_page():
@@ -22,17 +22,22 @@ def login_page():
 def login():
     username = request.form.get("username")
     password = request.form.get("password")
-    # Dummy check: you can replace with DB/auth logic
-    if username == "admin" and password == "123":
+    if (username == "admin" or username == "loga") and password == "123":
+        session["user"] = username  # store user in session
         return redirect(url_for("dashboard"))
     return "Invalid credentials. <a href='/'>Try again</a>"
 
 @app.route("/dashboard")
 def dashboard():
-    return render_template("dashboard.html")
+    if "user" not in session:
+        return redirect(url_for("login_page"))
+    return render_template("dashboard.html", user=session["user"])
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
+    if "user" not in session:
+        return redirect(url_for("login_page"))
+
     if request.method == "POST":
         # Collect form data
         name = request.form.get("name")
@@ -43,7 +48,6 @@ def profile():
         domain_skills = request.form.getlist("domain_skills")
         soft_skills = request.form.getlist("soft_skills")
 
-        # For now, just print (later you can call your function here)
         print("=== PROFILE DATA ===")
         print("Name:", name)
         print("Email:", email)
@@ -53,10 +57,15 @@ def profile():
         print("Domain Skills:", domain_skills)
         print("Soft Skills:", soft_skills)
 
-        # Redirect back or to dashboard after saving
-        return redirect(url_for("dashboard"))  # change if you have a dashboard route
+        return redirect(url_for("dashboard"))
 
-    return render_template("profile.html")
+    return render_template("profile.html", user=session["user"])
+
+# NEW: Logout Route
+@app.route("/logout")
+def logout():
+    session.clear()  # clears all session data
+    return redirect(url_for("login_page"))
 
 if __name__ == "__main__":
     app.run(debug=True)
