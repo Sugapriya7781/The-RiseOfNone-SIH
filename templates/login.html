@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Internship Portal — Login</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <!-- =========================
+       LOGIN SCREEN
+       ========================= -->
+  <div class="page-center">
+    <div class="login-card">
+      <div class="login-left">
+        <h2>Find the best internships</h2>
+        <p>Personalized recommendations • Track applications • Skill tests</p>
+        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.0.3&s=5d1a5b62a2d1d1f6a7f7de5f5368c1f6" alt="intern" class="hero-img">
+      </div>
+
+      <div class="login-right">
+        <h1 class="brand">Internship Portal</h1>
+        <h3>Welcome Back</h3>
+
+        <form id="loginForm" class="login-form" method="POST" action="/login">
+          <label for="username">Username or Email</label>
+          <input id="username" name="username" type="text" placeholder="name@example.com" required>
+
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" placeholder="••••••" required>
+
+          <button class="btn primary" type="submit">Sign in</button>
+
+          <div class="small-row">
+            <div class="divider"><span>OR</span></div>
+          </div>
+
+          <button type="button" class="btn outline google">
+            <i class="fa-brands fa-google"></i> Sign in with Google
+          </button>
+
+          <p class="muted">New here? <a href="#">Create an account</a></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

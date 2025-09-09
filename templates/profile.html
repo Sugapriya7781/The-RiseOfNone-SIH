@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Internship Portal — Profile Input</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <main class="main-content">
+    <header class="topbar">
+      <h2>Student Profile Input</h2>
+      <p class="muted">Fill in your details and select your skills</p>
+    </header>
+
+    <section class="content-section active">
+      <form method="POST" action="{{ url_for('profile') }}" class="profile-form">
+
+        
+        <!-- Basic Details -->
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input id="name" name="name" type="text" placeholder="Enter your name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="experience">Experience (in years)</label>
+          <input id="experience" name="experience" type="number" min="0" max="40" value="0">
+        </div>
+
+        <!-- Role Selection -->
+        <div class="form-group">
+          <label for="role">Choose Role</label>
+          <select id="role" name="role" required>
+            <option value="">-- Select Role --</option>
+            <option value="business_analyst">Business Analyst</option>
+            <option value="data_analyst">Data Analyst</option>
+            <option value="data_engineer">Data Engineer</option>
+            <option value="data_scientist">Data Scientist</option>
+          </select>
+        </div>
+
+        <!-- Skills (Multi-choice) -->
+        <div class="form-group">
+          <label>Hard Skills</label>
+          <div id="hardSkills" class="checkbox-group"></div>
+        </div>
+
+        <div class="form-group">
+          <label>Domain Skills</label>
+          <div id="domainSkills" class="checkbox-group"></div>
+        </div>
+
+        <div class="form-group">
+          <label>Soft Skills</label>
+          <div id="softSkills" class="checkbox-group"></div>
+        </div>
+
+        <!-- Submit -->
+        <div class="form-actions">
+          <button type="submit" class="btn primary">Save Profile</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    // ROLE_SKILLS dict (frontend version, same as Python)
+    const ROLE_SKILLS = {
+      "business_analyst": {
+        "hard": ["excel", "sql", "tableau", "power bi", "sas", "r",
+                 "statistics", "financial modeling", "data visualization", "reporting"],
+        "domain": ["finance", "banking", "insurance", "healthcare",
+                   "supply chain", "marketing", "operations"],
+        "soft": ["communication", "stakeholder management", "problem solving",
+                 "analytical thinking", "documentation"]
+      },
+      "data_analyst": {
+        "hard": ["sql", "python", "pandas", "numpy", "excel", "tableau", "power bi",
+                 "looker", "r", "statistics", "data cleaning", "etl"],
+        "domain": ["retail", "e-commerce", "marketing", "healthcare", "operations"],
+        "soft": ["attention to detail", "visualization storytelling",
+                 "collaboration", "critical thinking"]
+      },
+      "data_engineer": {
+        "hard": ["python", "sql", "java", "scala", "spark", "hadoop", "kafka",
+                 "airflow", "dbt", "snowflake", "redshift", "bigquery",
+                 "aws", "azure", "gcp", "docker", "kubernetes", "etl",
+                 "data warehouse", "pipelines"],
+        "domain": ["cloud", "streaming", "data pipelines", "big data",
+                   "healthcare", "finance"],
+        "soft": ["problem solving", "teamwork", "ownership", "documentation"]
+      },
+      "data_scientist": {
+        "hard": ["python", "r", "sql", "machine learning", "deep learning",
+                 "nlp", "tensorflow", "pytorch", "scikit-learn",
+                 "statistics", "probability", "optimization", "time series",
+                 "computer vision"],
+        "domain": ["ai", "healthcare", "finance", "retail",
+                   "predictive analytics", "genai"],
+        "soft": ["critical thinking", "research mindset",
+                 "communication", "problem solving"]
+      }
+    };
+
+    const roleSelect = document.getElementById("role");
+    const hardDiv = document.getElementById("hardSkills");
+    const domainDiv = document.getElementById("domainSkills");
+    const softDiv = document.getElementById("softSkills");
+
+    roleSelect.addEventListener("change", () => {
+      const role = roleSelect.value;
+      hardDiv.innerHTML = "";
+      domainDiv.innerHTML = "";
+      softDiv.innerHTML = "";
+
+      if (ROLE_SKILLS[role]) {
+        ROLE_SKILLS[role].hard.forEach(skill => {
+          hardDiv.innerHTML += `<label><input type="checkbox" name="hard_skills" value="${skill}"> ${skill}</label>`;
+        });
+        ROLE_SKILLS[role].domain.forEach(skill => {
+          domainDiv.innerHTML += `<label><input type="checkbox" name="domain_skills" value="${skill}"> ${skill}</label>`;
+        });
+        ROLE_SKILLS[role].soft.forEach(skill => {
+          softDiv.innerHTML += `<label><input type="checkbox" name="soft_skills" value="${skill}"> ${skill}</label>`;
+        });
+      }
+    });
+  </script>
+</body>
+</html>

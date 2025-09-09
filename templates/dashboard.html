@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Internship Portal — Dashboard</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <!-- =========================
+       DASHBOARD
+       ========================= -->
+  <div id="dashboard">
+    <!-- SIDEBAR -->
+    {% include 'sidebar.html' %}
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- Top header -->
+      <header class="topbar">
+        <div class="welcome">
+          <h2 id="pageTitle">Recommended Internships</h2>
+          <p id="welcomeText" class="muted">Handpicked roles to match your skills</p>
+        </div>
+
+        <div class="top-actions">
+          <input id="globalSearch" type="search" placeholder="Search internships, companies, locations...">
+          <button id="globalSearchBtn" class="btn">Search</button>
+        </div>
+      </header>
+
+      <!-- Content Sections -->
+      <section id="dashboardSection" class="content-section active">
+        <div class="section-row">
+          <div class="card small">
+            <h4>Recommended</h4>
+            <p class="muted">Based on your profile</p>
+            <div class="stat">5</div>
+          </div>
+          <div class="card small">
+            <h4>Applied</h4>
+            <p class="muted">Applications in progress</p>
+            <div id="appliedCount" class="stat">0</div>
+          </div>
+          <div class="card small">
+            <h4>Shortlisted</h4>
+            <p class="muted">Interview invites</p>
+            <div class="stat">1</div>
+          </div>
+        </div>
+
+        <h3 class="section-title">Top picks for you</h3>
+        <div id="internshipCards" class="cards-grid"></div>
+      </section>
+
+      <!-- Profile Section -->
+      <section id="profileSection" class="content-section hidden">
+        <div class="profile-layout">
+          <!-- Left -->
+          <aside class="profile-sidebar">
+            <img id="profilePic" class="profile-avatar" src="https://via.placeholder.com/150" alt="Profile picture">
+            <h2 id="pfNameDisplay">John Doe</h2>
+            <p class="role">Student / Intern</p>
+
+            <div class="profile-details">
+              <p><strong>General</strong></p>
+              <p>Experience: <span id="pfExp">0</span> years</p>
+              <p>Salary: <span id="pfSalary">—</span></p>
+              <p style="margin-top:8px"><strong>Languages</strong></p>
+              <p id="pfLangs">English</p>
+            </div>
+          </aside>
+
+          <!-- Right -->
+          <div class="profile-main">
+            <div class="card">
+              <h3>Professional Summary</h3>
+              <p id="pfSummary">Add a short professional summary about yourself...</p>
+            </div>
+            <div class="card">
+              <h3>Skills</h3>
+              <div id="pfSkillsTags" class="skills-tags">
+                <span class="tag">Problem-solving</span>
+                <span class="tag">Teamwork</span>
+                <span class="tag">Communication</span>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Portfolio</h3>
+              <div class="portfolio-grid">
+                <div class="portfolio-group">
+                  <h4>Projects</h4>
+                  <div class="thumbs">
+                    <img src="https://via.placeholder.com/100" alt="work">
+                    <img src="https://via.placeholder.com/100" alt="work">
+                    <img src="https://via.placeholder.com/100" alt="work">
+                  </div>
+                  <a href="#">Read More</a>
+                </div>
+                <div class="portfolio-group">
+                  <h4>Design</h4>
+                  <div class="thumbs">
+                    <img src="https://via.placeholder.com/100" alt="design">
+                    <img src="https://via.placeholder.com/100" alt="design">
+                    <img src="https://via.placeholder.com/100" alt="design">
+                  </div>
+                  <a href="#">Read More</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Assessment Section -->
+      <section id="testSection" class="content-section hidden">
+        <h3>Assessment Tests</h3>
+        <p class="muted">Take short tests to boost your profile score.</p>
+        <div class="test-box">
+          <h4>Frontend Basics (sample)</h4>
+          <p>3 questions • Estimated time: 5 mins</p>
+          <ol class="test-list">
+            <li>
+              <p><strong>1.</strong> What does CSS stand for?</p>
+              <label><input type="radio" name="q1" value="a"> Cascading Style Sheets</label>
+              <label><input type="radio" name="q1" value="b"> Computer Style Sheets</label>
+            </li>
+            <li>
+              <p><strong>2.</strong> Which tag is used for JavaScript?</p>
+              <label><input type="radio" name="q2" value="a"> &lt;script&gt;</label>
+              <label><input type="radio" name="q2" value="b"> &lt;javascript&gt;</label>
+            </li>
+            <li>
+              <p><strong>3.</strong> Which property changes text color in CSS?</p>
+              <label><input type="radio" name="q3" value="a"> color</label>
+              <label><input type="radio" name="q3" value="b"> font-color</label>
+            </li>
+          </ol>
+          <div class="form-actions">
+            <button id="startTest" class="btn primary">Submit Answers</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Applications Section -->
+      <section id="applicationSection" class="content-section hidden">
+        <h3>Applications</h3>
+        <p class="muted">Manage internships you've applied to</p>
+        <table class="app-table">
+          <thead>
+            <tr><th>Internship</th><th>Company</th><th>Date Applied</th><th>Status</th><th>Action</th></tr>
+          </thead>
+          <tbody id="applicationsList"></tbody>
+        </table>
+      </section>
+
+      <!-- Private Internships -->
+      <section id="privateSection" class="content-section hidden">
+        <h3>Private Internships</h3>
+        <p class="muted">Roles from private companies</p>
+        <div id="privateCards" class="cards-grid"></div>
+      </section>
+
+      <!-- Government Internships -->
+      <section id="governmentSection" class="content-section hidden">
+        <h3>Government Internships</h3>
+        <p class="muted">Roles from government bodies</p>
+        <div id="govCards" class="cards-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div id="detailModal" class="modal hidden">
+    <div class="modal-inner">
+      <button id="modalClose" class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
