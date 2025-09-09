@@ -134,3 +134,25 @@ body {
   margin-bottom: 8px;
   display: block;
 }
+.toast-notification {
+  position: fixed;
+  top: 32px;
+  right: 32px;
+  min-width: 240px;
+  max-width: 90vw;
+  background: #23272f;
+  color: #fff;
+  padding: 18px 28px;
+  border-radius: 8px;
+  font-size: 1.1em;
+  box-shadow: 0 0 20px rgba(30,30,30,0.12);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 12000;
+  transition: opacity 0.4s, top 0.4s;
+}
+.toast-notification.show {
+  opacity: 1;
+  pointer-events: auto;
+  top: 56px;
+}

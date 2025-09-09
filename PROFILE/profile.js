@@ -2,125 +2,66 @@
 const SKILL_SETS = {
   business_analyst: {
     hard: [
-      "excel",
-      "sql",
-      "tableau",
-      "power bi",
-      "sas",
-      "r",
-      "statistics",
-      "financial modeling",
-      "data visualization",
-      "reporting",
+      "excel", "sql", "tableau", "power bi", "sas", "r", "statistics",
+      "financial modeling", "data visualization", "reporting"
     ],
     domain: [
-      "finance",
-      "banking",
-      "insurance",
-      "healthcare",
-      "supply chain",
-      "marketing",
-      "operations",
+      "finance", "banking", "insurance", "healthcare",
+      "supply chain", "marketing", "operations"
     ],
     soft: [
-      "communication",
-      "stakeholder management",
-      "problem solving",
-      "analytical thinking",
-      "documentation",
+      "communication", "stakeholder management", "problem solving",
+      "analytical thinking", "documentation"
     ],
   },
   data_analyst: {
     hard: [
-      "sql",
-      "python",
-      "pandas",
-      "numpy",
-      "excel",
-      "tableau",
-      "power bi",
-      "looker",
-      "r",
-      "statistics",
-      "data cleaning",
-      "etl",
+      "sql", "python", "pandas", "numpy", "excel", "tableau",
+      "power bi", "looker", "r", "statistics", "data cleaning", "etl"
     ],
     domain: ["retail", "e-commerce", "marketing", "healthcare", "operations"],
     soft: [
-      "attention to detail",
-      "visualization storytelling",
-      "collaboration",
-      "critical thinking",
+      "attention to detail", "visualization storytelling",
+      "collaboration", "critical thinking"
     ],
   },
   data_engineer: {
     hard: [
-      "python",
-      "sql",
-      "java",
-      "scala",
-      "spark",
-      "hadoop",
-      "kafka",
-      "airflow",
-      "dbt",
-      "snowflake",
-      "redshift",
-      "bigquery",
-      "aws",
-      "azure",
-      "gcp",
-      "docker",
-      "kubernetes",
-      "etl",
-      "data warehouse",
-      "pipelines",
+      "python", "sql", "java", "scala", "spark", "hadoop", "kafka",
+      "airflow", "dbt", "snowflake", "redshift", "bigquery", "aws",
+      "azure", "gcp", "docker", "kubernetes", "etl",
+      "data warehouse", "pipelines"
     ],
     domain: [
-      "cloud",
-      "streaming",
-      "data pipelines",
-      "big data",
-      "healthcare",
-      "finance",
+      "cloud", "streaming", "data pipelines", "big data",
+      "healthcare", "finance"
     ],
-    soft: ["problem solving", "teamwork", "ownership", "documentation"],
+    soft: [
+      "problem solving", "teamwork", "ownership", "documentation"
+    ],
   },
   data_scientist: {
     hard: [
-      "python",
-      "r",
-      "sql",
-      "machine learning",
-      "deep learning",
-      "nlp",
-      "tensorflow",
-      "pytorch",
-      "scikit-learn",
-      "statistics",
-      "probability",
-      "optimization",
-      "time series",
-      "computer vision",
+      "python", "r", "sql", "machine learning", "deep learning", "nlp",
+      "tensorflow", "pytorch", "scikit-learn", "statistics", "probability",
+      "optimization", "time series", "computer vision"
     ],
     domain: [
-      "ai",
-      "healthcare",
-      "finance",
-      "retail",
-      "predictive analytics",
-      "genai",
+      "ai", "healthcare", "finance", "retail",
+      "predictive analytics", "genai"
     ],
-    soft: ["critical thinking", "research mindset", "communication", "problem solving"],
-  },
+    soft: [
+      "critical thinking", "research mindset", "communication",
+      "problem solving"
+    ],
+  }
 };
+
 // Flatten and deduplicate all skills
 const allSkills = Array.from(
-  new Set(
-    Object.values(SKILL_SETS).flatMap((role) =>
-      Object.values(role).flat()
-    )
-  )
+  new Set(Object.values(SKILL_SETS).flatMap(role =>
+    Object.values(role).flat()
+  ))
 ).sort();
 
 const skillsInput = document.getElementById("skillsInput");
@@ -140,67 +81,11 @@ const sidebarUniversity = document.getElementById("sidebarUniversity");
 
 // Country and cities data
 const countriesWithCities = {
-  India: [
-    "Mumbai",
-    "Delhi",
-    "Bangalore",
-    "Hyderabad",
-    "Chennai",
-    "Kolkata",
-    "Pune",
-    "Ahmedabad",
-    "Jaipur",
-    "Lucknow",
-  ],
-  USA: [
-    "New York",
-    "Los Angeles",
-    "Chicago",
-    "Houston",
-    "Phoenix",
-    "Philadelphia",
-    "San Antonio",
-    "San Diego",
-    "Dallas",
-    "San Jose",
-  ],
-  UK: [
-    "London",
-    "Birmingham",
-    "Leeds",
-    "Glasgow",
-    "Sheffield",
-    "Bradford",
-    "Liverpool",
-    "Edinburgh",
-    "Manchester",
-    "Bristol",
-  ],
-  Australia: [
-    "Sydney",
-    "Melbourne",
-    "Brisbane",
-    "Perth",
-    "Adelaide",
-    "Gold Coast",
-    "Canberra",
-    "Newcastle",
-    "Wollongong",
-    "Logan City",
-  ],
-  Japan: [
-    "Tokyo",
-    "Yokohama",
-    "Osaka",
-    "Nagoya",
-    "Sapporo",
-    "Kobe",
-    "Kyoto",
-    "Fukuoka",
-    "Kawasaki",
-    "Saitama",
-  ],
-  // Add more countries and cities if needed
+  India: ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Kolkata", "Pune", "Ahmedabad", "Jaipur", "Lucknow"],
+  USA: ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "San Diego", "Dallas", "San Jose"],
+  UK: ["London", "Birmingham", "Leeds", "Glasgow", "Sheffield", "Bradford", "Liverpool", "Edinburgh", "Manchester", "Bristol"],
+  Australia: ["Sydney", "Melbourne", "Brisbane", "Perth", "Adelaide", "Gold Coast", "Canberra", "Newcastle", "Wollongong", "Logan City"],
+  Japan: ["Tokyo", "Yokohama", "Osaka", "Nagoya", "Sapporo", "Kobe", "Kyoto", "Fukuoka", "Kawasaki", "Saitama"]
 };
 
 // Skill autocomplete
@@ -209,9 +94,9 @@ skillsInput.addEventListener("input", function () {
   suggestionBox.innerHTML = "";
   if (!val) return;
   const suggestions = allSkills
-    .filter((skill) => skill.toLowerCase().startsWith(val))
+    .filter(skill => skill.toLowerCase().startsWith(val))
     .slice(0, 7);
-  suggestions.forEach((skill) => {
+  suggestions.forEach(skill => {
     const item = document.createElement("div");
     item.innerHTML = skill.replace(
       new RegExp(val, "i"),
@@ -236,7 +121,7 @@ function addSkill() {
   let value = skillsInput.value.trim();
   if (!value) return;
   const skills = Array.from(skillsList.querySelectorAll(".skills-badge")).map(
-    (badge) => badge.getAttribute("data-skill").toLowerCase().trim()
+    badge => badge.getAttribute("data-skill").toLowerCase().trim()
   );
   if (skills.includes(value.toLowerCase().trim())) {
     skillsInput.value = "";
@@ -279,7 +164,7 @@ countrySelect.addEventListener("change", () => {
   const country = countrySelect.value;
   citySelect.innerHTML = '<option value="" selected disabled>Select a city</option>';
   if (country && countriesWithCities[country]) {
-    countriesWithCities[country].forEach((city) => {
+    countriesWithCities[country].forEach(city => {
       let opt = document.createElement("option");
       opt.value = city;
       opt.textContent = city;
@@ -307,8 +192,24 @@ phoneInput.addEventListener("input", () => {
   phoneInput.value = val;
 });
 
-// Save and update sidebar info
+// Toast Notification
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2200);
+}
+
+// Save and update sidebar info with validation check
 function saveProfile() {
+  const form = document.getElementById("profileForm");
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
   const firstName = document.getElementById("inputFirstName").value.trim();
   const lastName = document.getElementById("inputLastName").value.trim();
   const fullName = (firstName || lastName) ? (firstName + " " + lastName).trim() : "Unnamed User";
@@ -330,6 +231,6 @@ function saveProfile() {
   sidebarLocation.textContent = locationDisplay;
   sidebarUniversity.textContent = university;
 
-  alert("Profile saved and updated!");
+  showToast("Profile saved and updated!");
 }
 window.saveProfile = saveProfile;
