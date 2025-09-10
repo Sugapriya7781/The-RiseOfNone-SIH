@@ -16,15 +16,51 @@
 </head>
 <body>
   <!-- =========================
+       LOGIN SCREEN
+       ========================= -->
+  <div id="loginSection" class="page-center">
+    <div class="login-card">
+      <div class="login-left">
+        <h2>Find the best internships</h2>
+        <p>Personalized recommendations • Track applications • Skill tests</p>
+        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=600&auto=format&fit=crop" alt="intern" class="hero-img">
+      </div>
+
+      <div class="login-right">
+        <h1 class="brand">Internship Portal</h1>
+        <h3>Welcome Back</h3>
+
+        <form id="loginForm" class="login-form">
+          <label for="username">Username or Email</label>
+          <input id="username" type="text" placeholder="name@example.com" required>
+
+          <label for="password">Password</label>
+          <input id="password" type="password" placeholder="••••••" required>
+
+          <button class="btn primary" type="submit">Sign in</button>
+
+          <div class="divider"><span>OR</span></div>
+
+          <button type="button" class="btn outline google">
+            <i class="fa-brands fa-google"></i> Sign in with Google
+          </button>
+
+          <p class="muted">New here? <a href="#">Create an account</a></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
        DASHBOARD
        ========================= -->
-  <div id="dashboard">
-    <!-- SIDEBAR -->
+  <div id="dashboard" class="hidden">
+    <!-- Sidebar -->
     {% include 'sidebar.html' %}
 
-    <!-- MAIN CONTENT -->
+    <!-- Main content -->
     <main class="main-content">
-      <!-- Top header -->
+      <!-- Top bar -->
       <header class="topbar">
         <div class="welcome">
           <h2 id="pageTitle">Recommended Internships</h2>
@@ -37,7 +73,7 @@
         </div>
       </header>
 
-      <!-- Content Sections -->
+      <!-- Dashboard Section -->
       <section id="dashboardSection" class="content-section active">
         <div class="section-row">
           <div class="card small">
@@ -63,91 +99,71 @@
 
       <!-- Profile Section -->
       <section id="profileSection" class="content-section hidden">
-        <div class="profile-layout">
-          <!-- Left -->
-          <aside class="profile-sidebar">
-            <img id="profilePic" class="profile-avatar" src="https://via.placeholder.com/150" alt="Profile picture">
-            <h2 id="pfNameDisplay">John Doe</h2>
-            <p class="role">Student / Intern</p>
+        <div class="profile-grid">
+          <!-- Left card -->
+          <div class="profile-card">
+            <img id="profilePic" class="profile-pic" src="https://via.placeholder.com/140" alt="Profile picture">
+            <input id="resumeInput" type="file" />
+            <p class="muted">Upload resume (.pdf)</p>
+          </div>
 
-            <div class="profile-details">
-              <p><strong>General</strong></p>
-              <p>Experience: <span id="pfExp">0</span> years</p>
-              <p>Salary: <span id="pfSalary">—</span></p>
-              <p style="margin-top:8px"><strong>Languages</strong></p>
-              <p id="pfLangs">English</p>
-            </div>
-          </aside>
+          <!-- Right form -->
+          <div>
+            <h3>Personal Details</h3>
+            <form id="profileForm" class="profile-form">
+              <label for="pfName">Full name</label>
+              <input id="pfName" type="text" placeholder="Jane Doe">
 
-          <!-- Right -->
-          <div class="profile-main">
-            <div class="card">
-              <h3>Professional Summary</h3>
-              <p id="pfSummary">Add a short professional summary about yourself...</p>
-            </div>
-            <div class="card">
-              <h3>Skills</h3>
-              <div id="pfSkillsTags" class="skills-tags">
-                <span class="tag">Problem-solving</span>
-                <span class="tag">Teamwork</span>
-                <span class="tag">Communication</span>
+              <label for="pfEmail">Email</label>
+              <input id="pfEmail" type="email" placeholder="jane@example.com">
+
+              <label for="pfLocation">Location</label>
+              <input id="pfLocation" type="text" placeholder="City, State">
+
+              <label for="pfSkills">Skills</label>
+              <input id="pfSkills" type="text" placeholder="HTML, CSS, JS">
+
+              <h4>Education</h4>
+              <label for="pfEducation">Institution</label>
+              <input id="pfEducation" type="text" placeholder="ABC University">
+
+              <label for="pfDegree">Degree</label>
+              <input id="pfDegree" type="text" placeholder="B.Tech in Computer Science">
+
+              <label for="pfGradYear">Year of Graduation</label>
+              <input id="pfGradYear" type="text" placeholder="2026">
+
+              <h4>Experience</h4>
+              <label for="pfExpCompany">Company</label>
+              <input id="pfExpCompany" type="text" placeholder="Company Name">
+
+              <label for="pfExpRole">Role</label>
+              <input id="pfExpRole" type="text" placeholder="Intern / Developer">
+
+              <label for="pfExpDuration">Duration</label>
+              <input id="pfExpDuration" type="text" placeholder="Jan 2024 – Mar 2024">
+
+              <h4>Projects</h4>
+              <label for="pfProjectTitle">Project Title</label>
+              <input id="pfProjectTitle" type="text" placeholder="Smart Waste Segregator">
+
+              <label for="pfProjectDesc">Description</label>
+              <textarea id="pfProjectDesc" placeholder="Short description of the project"></textarea>
+
+              <div class="form-actions">
+                <button type="submit" class="btn primary">Save Profile</button>
+                <button type="button" id="profileReset" class="btn outline">Reset</button>
               </div>
-            </div>
-            <div class="card">
-              <h3>Portfolio</h3>
-              <div class="portfolio-grid">
-                <div class="portfolio-group">
-                  <h4>Projects</h4>
-                  <div class="thumbs">
-                    <img src="https://via.placeholder.com/100" alt="work">
-                    <img src="https://via.placeholder.com/100" alt="work">
-                    <img src="https://via.placeholder.com/100" alt="work">
-                  </div>
-                  <a href="#">Read More</a>
-                </div>
-                <div class="portfolio-group">
-                  <h4>Design</h4>
-                  <div class="thumbs">
-                    <img src="https://via.placeholder.com/100" alt="design">
-                    <img src="https://via.placeholder.com/100" alt="design">
-                    <img src="https://via.placeholder.com/100" alt="design">
-                  </div>
-                  <a href="#">Read More</a>
-                </div>
-              </div>
-            </div>
+            </form>
           </div>
         </div>
       </section>
 
-      <!-- Assessment Section -->
+      <!-- Test Section -->
       <section id="testSection" class="content-section hidden">
         <h3>Assessment Tests</h3>
         <p class="muted">Take short tests to boost your profile score.</p>
-        <div class="test-box">
-          <h4>Frontend Basics (sample)</h4>
-          <p>3 questions • Estimated time: 5 mins</p>
-          <ol class="test-list">
-            <li>
-              <p><strong>1.</strong> What does CSS stand for?</p>
-              <label><input type="radio" name="q1" value="a"> Cascading Style Sheets</label>
-              <label><input type="radio" name="q1" value="b"> Computer Style Sheets</label>
-            </li>
-            <li>
-              <p><strong>2.</strong> Which tag is used for JavaScript?</p>
-              <label><input type="radio" name="q2" value="a"> &lt;script&gt;</label>
-              <label><input type="radio" name="q2" value="b"> &lt;javascript&gt;</label>
-            </li>
-            <li>
-              <p><strong>3.</strong> Which property changes text color in CSS?</p>
-              <label><input type="radio" name="q3" value="a"> color</label>
-              <label><input type="radio" name="q3" value="b"> font-color</label>
-            </li>
-          </ol>
-          <div class="form-actions">
-            <button id="startTest" class="btn primary">Submit Answers</button>
-          </div>
-        </div>
+        <!-- You can embed tests dynamically -->
       </section>
 
       <!-- Applications Section -->
@@ -155,24 +171,20 @@
         <h3>Applications</h3>
         <p class="muted">Manage internships you've applied to</p>
         <table class="app-table">
-          <thead>
-            <tr><th>Internship</th><th>Company</th><th>Date Applied</th><th>Status</th><th>Action</th></tr>
-          </thead>
+          <thead><tr><th>Internship</th><th>Company</th><th>Date Applied</th><th>Status</th><th>Action</th></tr></thead>
           <tbody id="applicationsList"></tbody>
         </table>
       </section>
 
-      <!-- Private Internships -->
+      <!-- Private Section -->
       <section id="privateSection" class="content-section hidden">
         <h3>Private Internships</h3>
-        <p class="muted">Roles from private companies</p>
         <div id="privateCards" class="cards-grid"></div>
       </section>
 
-      <!-- Government Internships -->
+      <!-- Government Section -->
       <section id="governmentSection" class="content-section hidden">
         <h3>Government Internships</h3>
-        <p class="muted">Roles from government bodies</p>
         <div id="govCards" class="cards-grid"></div>
       </section>
     </main>

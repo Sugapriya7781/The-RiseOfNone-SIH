@@ -32,18 +32,23 @@
             </div>
             <div class="mb-1"><i class="fa fa-university"></i> <span id="sidebarUniversity">SRIT</span></div>
           </div>
+          <!-- Skills Section -->
           <div>
             <span class="profile-label">Specializations</span>
             <div id="skillsList" class="d-flex flex-wrap gap-2"></div>
 
-            <!-- Suggested skill keywords -->
-            <div id="suggestedSkills" class="d-flex flex-wrap gap-2 mt-2"></div>
-
+            <!-- Autocomplete input -->
             <div class="position-relative mt-2">
-              <input type="text" class="form-control" id="skillsInput" placeholder="Add a skill" autocomplete="off" />
+              <input type="text" class="form-control" id="skillsInput" placeholder="Type a skill..."
+                autocomplete="off" />
               <div id="suggestionBox" class="autocomplete-items"></div>
             </div>
-            <button class="btn btn-primary btn-sm mt-2 w-100" onclick="addSkill()">Add Skill</button>
+
+            <!-- Selected Skills (tags) -->
+            <div id="selectedSkills" class="d-flex flex-wrap gap-2 mt-2"></div>
+
+            <button class="btn btn-primary btn-sm mt-2 w-100" type="button" onclick="manualAddSkill()">Add
+              Skill</button>
           </div>
         </div>
       </div>

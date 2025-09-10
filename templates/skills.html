@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skills Assessment</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <div class="sidebar-container">
+    <!-- Sidebar -->
+    <div class="profile-sidebar">
+      {% include 'sidebar.html' %}
+    </div>
+    <div class="main-content"></div>
+    <h2 class="mb-4 text-primary">Skills Assessment Test</h2>
+
+    <!-- Role Selection -->
+    <div class="mb-4">
+      <label for="roleSelect" class="form-label">Select Role</label>
+      <select id="roleSelect" class="form-select">
+        <option value="">-- Choose a role --</option>
+        <option value="business_analyst">Business Analyst</option>
+        <option value="data_analyst">Data Analyst</option>
+        <option value="data_engineer">Data Engineer</option>
+        <option value="data_scientist">Data Scientist</option>
+      </select>
+    </div>
+
+    <!-- Skills Container -->
+    <div id="skillsContainer" class="mt-4 d-none">
+      <h4 class="mb-3">Select your skills</h4>
+
+      <div class="mb-4">
+        <h5>Hard Skills</h5>
+        <div id="hardSkills" class="row g-2"></div>
+      </div>
+
+      <div class="mb-4">
+        <h5>Domain Skills</h5>
+        <div id="domainSkills" class="row g-2"></div>
+      </div>
+
+      <div class="mb-4">
+        <h5>Soft Skills</h5>
+        <div id="softSkills" class="row g-2"></div>
+      </div>
+
+      <button id="saveSkillsBtn" class="btn btn-primary w-100">Save Selected Skills</button>
+    </div>
+
+    <!-- Confirmation -->
+    <div id="confirmation" class="alert alert-success mt-3 d-none">
+      ✅ Your skills have been saved successfully!
+    </div>
+  </div>
+
+  <script>
+    const ROLE_SKILLS = {
+      "business_analyst": {
+        "hard": ["excel", "sql", "tableau", "power bi", "sas", "r", "statistics", "financial modeling", "data visualization", "reporting"],
+        "domain": ["finance", "banking", "insurance", "healthcare", "supply chain", "marketing", "operations"],
+        "soft": ["communication", "stakeholder management", "problem solving", "analytical thinking", "documentation"]
+      },
+      "data_analyst": {
+        "hard": ["sql", "python", "pandas", "numpy", "excel", "tableau", "power bi", "looker", "r", "statistics", "data cleaning", "etl"],
+        "domain": ["retail", "e-commerce", "marketing", "healthcare", "operations"],
+        "soft": ["attention to detail", "visualization storytelling", "collaboration", "critical thinking"]
+      },
+      "data_engineer": {
+        "hard": ["python", "sql", "java", "scala", "spark", "hadoop", "kafka", "airflow", "dbt", "snowflake", "redshift", "bigquery", "aws", "azure", "gcp", "docker", "kubernetes", "etl", "data warehouse", "pipelines"],
+        "domain": ["cloud", "streaming", "data pipelines", "big data", "healthcare", "finance"],
+        "soft": ["problem solving", "teamwork", "ownership", "documentation"]
+      },
+      "data_scientist": {
+        "hard": ["python", "r", "sql", "machine learning", "deep learning", "nlp", "tensorflow", "pytorch", "scikit-learn", "statistics", "probability", "optimization", "time series", "computer vision"],
+        "domain": ["ai", "healthcare", "finance", "retail", "predictive analytics", "genai"],
+        "soft": ["critical thinking", "research mindset", "communication", "problem solving"]
+      }
+    };
+
+    const roleSelect = document.getElementById("roleSelect");
+    const skillsContainer = document.getElementById("skillsContainer");
+    const hardSkillsDiv = document.getElementById("hardSkills");
+    const domainSkillsDiv = document.getElementById("domainSkills");
+    const softSkillsDiv = document.getElementById("softSkills");
+    const saveBtn = document.getElementById("saveSkillsBtn");
+    const confirmation = document.getElementById("confirmation");
+
+    // When role changes, show its skills
+    roleSelect.addEventListener("change", () => {
+      const role = roleSelect.value;
+      if (!role) {
+        skillsContainer.classList.add("d-none");
+        return;
+      }
+
+      skillsContainer.classList.remove("d-none");
+
+      // Clear old skills
+      hardSkillsDiv.innerHTML = "";
+      domainSkillsDiv.innerHTML = "";
+      softSkillsDiv.innerHTML = "";
+
+      // Load new ones
+      ROLE_SKILLS[role].hard.forEach(skill => hardSkillsDiv.innerHTML += createCheckbox("hard", skill));
+      ROLE_SKILLS[role].domain.forEach(skill => domainSkillsDiv.innerHTML += createCheckbox("domain", skill));
+      ROLE_SKILLS[role].soft.forEach(skill => softSkillsDiv.innerHTML += createCheckbox("soft", skill));
+    });
+
+    // Helper to render checkbox
+    function createCheckbox(type, skill) {
+      return `
+        <div class="col-md-4">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="${skill}" id="${type}_${skill}">
+            <label class="form-check-label" for="${type}_${skill}">${skill}</label>
+          </div>
+        </div>
+      `;
+    }
+
+    // Save selected skills
+    saveBtn.addEventListener("click", () => {
+      const selected = Array.from(document.querySelectorAll("input[type=checkbox]:checked"))
+        .map(cb => cb.value);
+
+      const role = roleSelect.value;
+
+      localStorage.setItem("selectedRole", role);
+      localStorage.setItem("selectedSkills", JSON.stringify(selected));
+
+      confirmation.classList.remove("d-none");
+      setTimeout(() => confirmation.classList.add("d-none"), 3000);
+    });
+  </script>
+</body>
+</html>

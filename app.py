@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
-
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import pandas as pd
 from text_exact import recommend_jobs, extract_skills, ROLE_SKILLS
 
@@ -18,6 +17,12 @@ app.secret_key = "supersecret"  # needed for session
 def login_page():
     return render_template("login.html")
 
+@app.route("/get_skills")
+def get_skills():
+    return jsonify(ROLE_SKILLS)
+
+
+
 @app.route("/login", methods=["POST"])
 def login():
     username = request.form.get("username")
@@ -32,6 +37,10 @@ def dashboard():
     if "user" not in session:
         return redirect(url_for("login_page"))
     return render_template("dashboard.html", user=session["user"])
+
+@app.route('/skills')
+def skills():
+    return render_template('skills.html')
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
@@ -60,6 +69,8 @@ def profile():
         return redirect(url_for("dashboard"))
 
     return render_template("profile.html", user=session["user"])
+
+
 
 # NEW: Logout Route
 @app.route("/logout")
