@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Main Menu - Internship Portal</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main_menu/menu.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <i class="fa-solid fa-briefcase"></i>
+      <span>Internship Portal</span>
+    </div>
+    <nav>
+      <ul>
+        <li class="active" data-section="dashboard"><i class="fa-solid fa-house"></i> Dashboard</li>
+        <li data-section="profile"><i class="fa-solid fa-user"></i> Profile</li>
+        <li data-section="assessment"><i class="fa-solid fa-clipboard-list"></i> Assessment Test</li>
+        <li data-section="applications"><i class="fa-solid fa-folder-open"></i> Application Management</li>
+        <li data-section="private_internships"><i class="fa-solid fa-user-lock"></i> Private Internships</li>
+        <li data-section="government_internships"><i class="fa-solid fa-building-columns"></i> Government Internships</li>
+        <li data-section="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <header>
+      <h1>Welcome, <span id="usernameDisplay">{{ username }}</span></h1>
+    </header>
+
+    <section class="top-picks-header">
+      <h2>Top picks for you</h2>
+      <p class="subtitle">Handpicked roles to match your skills</p>
+      <div class="info-cards">
+        <div class="info-card">
+          <h3 id="recommendedCount">5</h3>
+          <p>Recommended<br/><small>Based on your profile</small></p>
+        </div>
+        <div class="info-card">
+          <h3 id="appliedCount">0</h3>
+          <p>Applied<br/><small>Applications in progress</small></p>
+        </div>
+        <div class="info-card">
+          <h3 id="shortlistedCount">1</h3>
+          <p>Shortlisted<br/><small>Interview invites</small></p>
+        </div>
+        <div class="search-bar-header">
+          <input type="text" id="internshipSearch" placeholder="Search internships, companies, locations..." />
+          <button id="searchBtn">Search</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="internship-grid" id="internshipList">
+      <!-- Populated by JS -->
+    </section>
+
+    <section id="sectionContent">
+      <p>Select a menu item to see content here.</p>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='main_menu/menu.js') }}"></script>
+</body>
+</html>
