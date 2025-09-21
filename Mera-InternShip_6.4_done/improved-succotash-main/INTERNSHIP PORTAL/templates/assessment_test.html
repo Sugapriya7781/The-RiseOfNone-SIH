@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="{{ locale }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ _('Assessment Test | Internship Portal') }}</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Sidebar + Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='main_menu/menu.css') }}" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    .option-button {
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .option-button.selected {
+      background-color: #2563eb;
+      color: white;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen font-sans text-gray-900 flex">
+
+  <!-- Sidebar -->
+  <aside class="sidebar flex-shrink-0">
+    <div class="brand p-4">
+      <i class="fa-solid fa-briefcase"></i> {{ _('Internship Portal') }}
+    </div>
+    <nav>
+      <ul class="list-unstyled m-0 p-0">
+        <li class="p-3" onclick="window.location.href='/main_menu'">
+          <i class="fa-solid fa-house me-2"></i>{{ _('Dashboard') }}
+        </li>
+        <li class="p-3" onclick="window.location.href='/profile'">
+          <i class="fa-solid fa-user me-2"></i>{{ _('Profile') }}
+        </li>
+        <li class="p-3 active" onclick="window.location.href='/assessment'">
+          <i class="fa-solid fa-clipboard-list me-2"></i>{{ _('Assessment Test') }}
+        </li>
+        <li class="p-3" onclick="window.location.href='/applications'">
+          <i class="fa-solid fa-folder-open me-2"></i>{{ _('Application Management') }}
+        </li>
+        <li class="p-3" onclick="window.location.href='/private_internship'">
+          <i class="fa-solid fa-user-lock me-2"></i>{{ _('Private Internships') }}
+        </li>
+        <li class="p-3" onclick="window.location.href='/government_internships'">
+          <i class="fa-solid fa-building-columns me-2"></i>{{ _('Government Internships') }}
+        </li>
+        <li class="p-3" onclick="window.location.href='/logout'">
+          <i class="fa-solid fa-right-from-bracket me-2"></i>{{ _('Logout') }}
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-grow p-8 max-w-5xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8 border-b-2 border-blue-600 pb-2">
+      {{ _('Assessment Tests') }}
+    </h1>
+
+    <!-- Test List -->
+    <div id="test-list" class="space-y-6"></div>
+
+    <!-- Test Taking Section -->
+    <div id="test-section" class="hidden bg-white p-8 rounded-lg shadow-lg mt-8">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-semibold" id="test-title"></h2>
+        <span class="font-mono text-lg" id="timer">00:00</span>
+      </div>
+
+      <div id="question-container" class="space-y-6"></div>
+
+      <div class="mt-6 flex justify-between">
+        <button id="prev-btn" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400" disabled>
+          {{ _('Previous') }}
+        </button>
+        <button id="next-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          {{ _('Next') }}
+        </button>
+      </div>
+
+      <div class="mt-6 flex justify-end">
+        <button id="submit-btn" class="hidden bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700">
+          {{ _('Submit Test') }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="result-section" class="hidden bg-white p-8 rounded-lg shadow-lg mt-8">
+      <h2 class="text-2xl font-semibold mb-4">{{ _('Test Results') }}</h2>
+      <p class="mb-2">
+        {{ _('Your score:') }} <span id="score"></span> / <span id="total-questions"></span>
+      </p>
+      <div id="result-details" class="space-y-4"></div>
+      <button onclick="restartTest()" class="mt-6 bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700">
+        {{ _('Back to Tests') }}
+      </button>
+    </div>
+  </main>
+
+  <!-- JS Logic -->
+  <script>
+    const tests = [
+      {
+        id: 1,
+        title: "Internship Aptitude Test",
+        duration_minutes: 1,
+        questions: [
+          {
+            id: 1,
+            text: "Which language is primarily used for web development?",
+            options: [
+              { id: 'a', text: "Python" },
+              { id: 'b', text: "JavaScript" },
+              { id: 'c', text: "C++" },
+              { id: 'd', text: "Java" }
+            ],
+            correct: 'b'
+          },
+          {
+            id: 2,
+            text: "Which data structure uses FIFO principle?",
+            options: [
+              { id: 'a', text: "Stack" },
+              { id: 'b', text: "Queue" },
+              { id: 'c', text: "Graph" },
+              { id: 'd', text: "Tree" }
+            ],
+            correct: 'b'
+          },
+          {
+            id: 3,
+            text: "What is 2 + 2 * 3?",
+            options: [
+              { id: 'a', text: "8" },
+              { id: 'b', text: "12" },
+              { id: 'c', text: "10" },
+              { id: 'd', text: "6" }
+            ],
+            correct: 'a'
+          }
+        ]
+      }
+    ];
+
+    let currentTest = null;
+    let currentQuestionIndex = 0;
+    let userAnswers = {};
+    let timerInterval = null;
+    let timeLeft = 0;
+
+    const testListEl = document.getElementById("test-list");
+    const testSectionEl = document.getElementById("test-section");
+    const resultSectionEl = document.getElementById("result-section");
+
+    function init() {
+      testListEl.innerHTML = "";
+      if (tests.length === 0) {
+        testListEl.innerHTML = `<p class="text-red-600">No tests available</p>`;
+        return;
+      }
+      tests.forEach(test => {
+        const card = document.createElement("div");
+        card.className = "bg-white p-6 rounded-md shadow hover:shadow-lg";
+        card.innerHTML = `
+          <h3 class="text-xl font-semibold">${test.title}</h3>
+          <p class="mt-1">Duration: <strong>${test.duration_minutes} ${test.duration_minutes > 1 ? "minutes" : "minute"}</strong></p>
+          <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Start Test</button>
+        `;
+        card.querySelector("button").addEventListener("click", () => startTest(test.id));
+        testListEl.appendChild(card);
+      });
+    }
+
+    function startTest(testId) {
+      currentTest = tests.find(t => t.id === testId);
+      timeLeft = currentTest.duration_minutes * 60;
+      userAnswers = {};
+      currentQuestionIndex = 0;
+
+      testListEl.classList.add("hidden");
+      resultSectionEl.classList.add("hidden");
+      testSectionEl.classList.remove("hidden");
+
+      document.getElementById("test-title").innerText = currentTest.title;
+
+      updateTimer();
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          submitTest();
+        }
+        updateTimer();
+      }, 1000);
+
+      renderQuestion();
+      updateNavigationButtons();
+      document.getElementById("submit-btn").classList.add("hidden");
+    }
+
+    function updateTimer() {
+      const mins = Math.floor(timeLeft / 60).toString().padStart(2, "0");
+      const secs = (timeLeft % 60).toString().padStart(2, "0");
+      document.getElementById("timer").innerText = `${mins}:${secs}`;
+    }
+
+    function renderQuestion() {
+      const question = currentTest.questions[currentQuestionIndex];
+      const container = document.getElementById("question-container");
+      container.innerHTML = `
+        <p class="font-semibold text-lg mb-4">Q${currentQuestionIndex + 1}. ${question.text}</p>
+        <div class="space-y-3">
+          ${question.options.map(opt => `
+            <button class="option-button block w-full border border-gray-300 rounded py-2 px-4 text-left ${userAnswers[question.id] === opt.id ? 'selected bg-blue-600 text-white' : ''}"
+              data-opt="${opt.id}">
+              ${opt.id.toUpperCase()}. ${opt.text}
+            </button>
+          `).join("")}
+        </div>
+      `;
+      container.querySelectorAll(".option-button").forEach(btn => {
+        btn.addEventListener("click", () => {
+          userAnswers[question.id] = btn.getAttribute("data-opt");
+          renderQuestion();
+        });
+      });
+    }
+
+    function updateNavigationButtons() {
+      document.getElementById("prev-btn").disabled = currentQuestionIndex === 0;
+      if (currentQuestionIndex === currentTest.questions.length - 1) {
+        document.getElementById("next-btn").classList.add("hidden");
+        document.getElementById("submit-btn").classList.remove("hidden");
+      } else {
+        document.getElementById("next-btn").classList.remove("hidden");
+        document.getElementById("submit-btn").classList.add("hidden");
+      }
+    }
+
+    document.getElementById("prev-btn").addEventListener("click", () => {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderQuestion();
+        updateNavigationButtons();
+      }
+    });
+
+    document.getElementById("next-btn").addEventListener("click", () => {
+      if (currentQuestionIndex < currentTest.questions.length - 1) {
+        currentQuestionIndex++;
+        renderQuestion();
+        updateNavigationButtons();
+      }
+    });
+
+    document.getElementById("submit-btn").addEventListener("click", () => {
+      clearInterval(timerInterval);
+      submitTest();
+    });
+
+    function submitTest() {
+      testSectionEl.classList.add("hidden");
+      resultSectionEl.classList.remove("hidden");
+
+      const totalQuestions = currentTest.questions.length;
+      let score = 0;
+      const resultDetailsEl = document.getElementById("result-details");
+      resultDetailsEl.innerHTML = "";
+
+      currentTest.questions.forEach(q => {
+        const userAnswer = userAnswers[q.id] || "No Answer";
+        const isCorrect = userAnswer === q.correct;
+        if (isCorrect) score++;
+
+        const div = document.createElement("div");
+        div.className = `p-4 rounded border ${isCorrect ? "border-green-500 bg-green-50" : "border-red-500 bg-red-50"}`;
+        div.innerHTML = `
+          <p><strong>Q:</strong> ${q.text}</p>
+          <p><strong>{{ _('Your answer:') }}</strong> ${userAnswer.toUpperCase()} ${userAnswer === "No Answer" ? "" : "- " + q.options.find(o => o.id === userAnswer)?.text}</p>
+          <p><strong>{{ _('Correct answer:') }}</strong> ${q.correct.toUpperCase()} - ${q.options.find(o => o.id === q.correct).text}</p>
+        `;
+        resultDetailsEl.appendChild(div);
+      });
+
+      document.getElementById("score").innerText = score;
+      document.getElementById("total-questions").innerText = totalQuestions;
+    }
+
+    function restartTest() {
+      resultSectionEl.classList.add("hidden");
+      testListEl.classList.remove("hidden");
+      userAnswers = {};
+      currentQuestionIndex = 0;
+      currentTest = null;
+    }
+
+    init();
+  </script>
+</body>
+</html>
